@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CGraphics", "CGraphics.csproj", "{9CF7D94A-5C8A-4C49-BC28-BB97801FFB08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab1", "..\Lab1\Lab1.csproj", "{862B976F-3D84-4BFD-B08F-50E441D3F89A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{9CF7D94A-5C8A-4C49-BC28-BB97801FFB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CF7D94A-5C8A-4C49-BC28-BB97801FFB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CF7D94A-5C8A-4C49-BC28-BB97801FFB08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862B976F-3D84-4BFD-B08F-50E441D3F89A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862B976F-3D84-4BFD-B08F-50E441D3F89A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862B976F-3D84-4BFD-B08F-50E441D3F89A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862B976F-3D84-4BFD-B08F-50E441D3F89A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
