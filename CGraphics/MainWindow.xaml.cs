@@ -24,5 +24,13 @@ namespace CGraphics
         {
             InitializeComponent();
         }
+
+        private void BtnLab1OpenClick(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            var lab1 = new Lab1.MainWindow();
+            lab1.ShowDialog();
+            Show();
+        }
     }
 }
