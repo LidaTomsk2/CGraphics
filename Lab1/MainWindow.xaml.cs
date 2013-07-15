@@ -37,11 +37,28 @@ namespace Lab1
             image.MouseLeftButtonDown += ImageOnMouseLeftButtonDown;
             image.MouseLeftButtonUp += ImageOnMouseLeftButtonUp;
             MouseMove += OnMouseMove;
+            dudPixelSize.ValueChanged += DudPixelSizeValueChanged;
+            cpLineColor.SelectedColorChanged += CpLineColorSelectedColorChanged;
+            btnClear.Click += (sender, args) => _bmp.Clear();
         }
 
         private void ImageOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
+            if (_isLeftBtnPressed == false) return;
             _isLeftBtnPressed = false;
+            var point = mouseButtonEventArgs.GetPosition(image);
+            if (point.X >= image.ActualWidth || point.X <= 0 || point.Y >= image.ActualHeight || point.Y <= 0) return;
+
+            int x1 = Convert.ToInt16(_fromPoint.X), y1 = Convert.ToInt16(_fromPoint.Y);
+            int x2 = Convert.ToInt16(point.X), y2 = Convert.ToInt16(point.Y);
+
+            if (cbAlgType.SelectedIndex == 0)
+            {
+                _lineDrawer.BresenhamLine(x1, y1, x2, y2);
+            }
+            else _lineDrawer.WuLine(x1, y1, x2, y2);
+
+            Mouse.SetCursor(Cursors.Arrow);
         }
 
         private void ImageOnMouseLeftButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
@@ -53,17 +70,17 @@ namespace Lab1
         private void OnMouseMove(object sender, MouseEventArgs mouseEventArgs)
         {
             if (_isLeftBtnPressed == false) return;
-            var point = mouseEventArgs.GetPosition(image);
-            if (point.X >= image.ActualWidth || point.X <= 0 || point.Y >= image.ActualHeight || point.Y <= 0) return;
-            _bmp.Clear();
-            int x1 = Convert.ToInt16(_fromPoint.X), y1 = Convert.ToInt16(_fromPoint.Y);
-            int x2 = Convert.ToInt16(point.X), y2 = Convert.ToInt16(point.Y);
+            Mouse.SetCursor(Cursors.Pen);
+        }
 
-            if (cbAlgType.SelectedIndex == 0)
-            {
-                _lineDrawer.BresenhamLine(x1, y1, x2, y2);
-            }
-            else _lineDrawer.WuLine(x1, y1, x2, y2);
+        private void DudPixelSizeValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            _lineDrawer.PixelSize = Convert.ToByte(dudPixelSize.Value);
+        }
+
+        private void CpLineColorSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
+        {
+            _lineDrawer.Color = cpLineColor.SelectedColor;
         }
     }
 }
