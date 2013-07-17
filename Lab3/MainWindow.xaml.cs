@@ -85,29 +85,27 @@ namespace Lab3
 
         private void MenuItemWorkClick(object sender, RoutedEventArgs e)
         {
-            if (_firstPoints.Count == 3 && _secondPoints.Count == 3)
+            if (_firstPoints.Count != 3 || _secondPoints.Count != 3) return;
+
+            using (var src = new Bitmap(_url.AbsolutePath))
             {
-                using (var src = new Bitmap(_url.AbsolutePath))
-                using (var bmp = new Bitmap(src.Width, src.Height))
-                using (var gr = Graphics.FromImage(bmp))
+                var warpMatr = Helper.GetWarpMatrix(_firstPoints, _secondPoints);
+                using(var memory = new MemoryStream())
                 {
-                    gr.Clear(System.Drawing.Color.White);
-                    var matr = AffineTrasformations.GetWarpMatrix(_firstPoints, _secondPoints);
-                    gr.MultiplyTransform(matr);
-                    gr.DrawImage(src, new System.Drawing.Rectangle(0, 0, src.Width, src.Height));
+                    var bitmap = Helper.CreatePicture(src, warpMatr);
+                    bitmap.Save(memory, ImageFormat.Png);
+                    memory.Position = 0;
+                        
+                    var bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.StreamSource = memory;
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.EndInit();
 
-                    var bi = new BitmapImage();
-                    bi.BeginInit();
-                    var ms = new MemoryStream();
-                    bmp.Save(ms, ImageFormat.Bmp);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    bi.StreamSource = ms;
-                    bi.EndInit();
-
-                    img2.Source = bi;
+                    img2.Source = bitmapImage;
                 }
-                ClearCanvas();
             }
+            ClearCanvas();
         }
 
         private void ClearCanvas()
