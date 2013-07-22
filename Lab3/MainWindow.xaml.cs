@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using Brushes = System.Windows.Media.Brushes;
-using Image = System.Drawing.Image;
 using Point = System.Windows.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
@@ -38,7 +27,7 @@ namespace Lab3
             canvas2.MouseLeftButtonDown += Canvas2OnMouseLeftButtonDown;
         }
 
-        private Rectangle GetRect(MouseButtonEventArgs args)
+        private static Rectangle GetRect(MouseEventArgs args)
         {
             var rect = new Rectangle { Width = 5, Height = 5, Fill = Brushes.Black };
             Canvas.SetLeft(rect, args.GetPosition((Canvas)args.Source).X);
@@ -63,7 +52,7 @@ namespace Lab3
             if (_secondPoints.Count == 3)
             {
                 _secondPoints.RemoveAt(0);
-                canvas1.Children.RemoveAt(0);
+                canvas2.Children.RemoveAt(0);
             }
             _secondPoints.Add(mouseButtonEventArgs.GetPosition(img2));
             var rect = GetRect(mouseButtonEventArgs);
@@ -72,7 +61,7 @@ namespace Lab3
 
         private void MenuItemOpenClick(object sender, RoutedEventArgs e)
         {
-            var openDialog = new OpenFileDialog {Filter = "Изображения (*.bmp, *.jpg)|*.bmp;*.jpg"};
+            var openDialog = new OpenFileDialog { Filter = "Изображения (*.bmp, *.jpg)|*.bmp;*.jpg" };
             if (openDialog.ShowDialog().Value)
             {
                 _url = new Uri(openDialog.FileName);
@@ -89,20 +78,10 @@ namespace Lab3
 
             using (var src = new Bitmap(_url.AbsolutePath))
             {
-                var warpMatr = Helper.GetWarpMatrix(_firstPoints, _secondPoints);
-                using(var memory = new MemoryStream())
+                var warpMatr = WarpMatrix.GetWarpMatrix(_firstPoints, _secondPoints);
+                using (var bitmap = BitmapHelper.CreatePicture(src, warpMatr))
                 {
-                    var bitmap = Helper.CreatePicture(src, warpMatr);
-                    bitmap.Save(memory, ImageFormat.Png);
-                    memory.Position = 0;
-                        
-                    var bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.StreamSource = memory;
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.EndInit();
-
-                    img2.Source = bitmapImage;
+                    img2.Source = BitmapHelper.GetBitmapImage(bitmap);
                 }
             }
             ClearCanvas();
