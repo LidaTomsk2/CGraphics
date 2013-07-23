@@ -61,13 +61,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Filtering\BilinealFiltering.cs" />
+    <Compile Include="Filtering\IFilter.cs" />
+    <Compile Include="Filtering\ImageCreator.cs" />
+    <Compile Include="Filtering\NoneFiltering.cs" />
+    <Compile Include="Filtering\TrilinearFiltering.cs" />
+    <Compile Include="FilterType.cs" />
     <Compile Include="WarpMatrix.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="BitmapHelper.cs" />
-    <Compile Include="FilteringHelper.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

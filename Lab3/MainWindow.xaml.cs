@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Lab3.Filtering;
 using Microsoft.Win32;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
@@ -79,10 +80,29 @@ namespace Lab3
             using (var src = new Bitmap(_url.AbsolutePath))
             {
                 var warpMatr = WarpMatrix.GetWarpMatrix(_firstPoints, _secondPoints);
-                using (var bitmap = BitmapHelper.CreatePicture(src, warpMatr))
+
+                var filterType = FilterType.Trilinear;
+                IFilter filter;
+                switch (filterType)
                 {
-                    img2.Source = BitmapHelper.GetBitmapImage(bitmap);
+                    case FilterType.None:
+                        filter = new NoneFiltering(src, warpMatr);
+                        break;
+
+                    case FilterType.Bilinear:
+                        filter = new BilinealFiltering(src, warpMatr);
+                        break;
+
+                    case FilterType.Trilinear:
+                        filter = new TrilinearFiltering(src, warpMatr);
+                        break;
+
+                    default:
+                        filter = new NoneFiltering(src, warpMatr);
+                        break;
                 }
+
+                img2.Source = ImageCreator.GetImage(filter);
             }
             ClearCanvas();
         }
