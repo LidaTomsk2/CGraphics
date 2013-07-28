@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LSystemModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Кривая Гильберта</Name>
+  <StepSize>15</StepSize>
+  <Angle>90</Angle>
+  <DeepValue>7</DeepValue>
+  <Rules>
+    <LSystemRule>
+      <Name>83</Name>
+      <Value>X</Value>
+    </LSystemRule>
+    <LSystemRule>
+      <Name>88</Name>
+      <Value>-YF+XFX+FY-</Value>
+    </LSystemRule>
+    <LSystemRule>
+      <Name>89</Name>
+      <Value>+XF-YFY-FX+</Value>
+    </LSystemRule>
+  </Rules>
+</LSystemModel>

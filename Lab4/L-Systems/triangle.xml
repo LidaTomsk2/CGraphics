@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LSystemModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Треугольник Серпинского</Name>
+  <StepSize>1</StepSize>
+  <Angle>60</Angle>
+  <DeepValue>10</DeepValue>
+  <Rules>
+    <LSystemRule>
+      <Name>83</Name>
+      <Value>FXF--FF--FF</Value>
+    </LSystemRule>
+    <LSystemRule>
+      <Name>70</Name>
+      <Value>FF</Value>
+    </LSystemRule>
+    <LSystemRule>
+      <Name>88</Name>
+      <Value>--FXF++FXF++FXF--</Value>
+    </LSystemRule>
+  </Rules>
+</LSystemModel>

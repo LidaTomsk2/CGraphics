@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LSystemModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Дракон Хартера-Хатвея</Name>
+  <StepSize>2</StepSize>
+  <Angle>90</Angle>
+  <DeepValue>15</DeepValue>
+  <Rules>
+    <LSystemRule>
+      <Name>83</Name>
+      <Value>FX</Value>
+    </LSystemRule>
+    <LSystemRule>
+      <Name>70</Name>
+      <Value>F</Value>
+    </LSystemRule>
+    <LSystemRule>
+      <Name>88</Name>
+      <Value>X+YF+</Value>
+    </LSystemRule>
+    <LSystemRule>
+      <Name>89</Name>
+      <Value>-FX-Y</Value>
+    </LSystemRule>
+  </Rules>
+</LSystemModel>

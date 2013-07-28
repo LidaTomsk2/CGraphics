@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LSystemModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Дерево 4</Name>
+  <StepSize>15</StepSize>
+  <Angle>20</Angle>
+  <DeepValue>5</DeepValue>
+  <Rules>
+    <LSystemRule>
+      <Name>83</Name>
+      <Value>F</Value>
+    </LSystemRule>
+    <LSystemRule>
+      <Name>70</Name>
+      <Value>-F[-F+F-F]+[+F-F-F]</Value>
+    </LSystemRule>
+  </Rules>
+</LSystemModel>
