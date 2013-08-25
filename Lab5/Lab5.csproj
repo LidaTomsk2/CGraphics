@@ -49,10 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Camera.cs" />
+    <Compile Include="Core\Effects\Lightning.cs" />
+    <Compile Include="Core\Primitives\House.cs" />
     <Compile Include="MainWindow.cs" />
-    <Compile Include="Primitives\Cube.cs" />
-    <Compile Include="Primitives\IDrawable.cs" />
-    <Compile Include="Primitives\Sphere.cs" />
+    <Compile Include="Core\Primitives\CoordGrid.cs" />
+    <Compile Include="Core\Primitives\Cube.cs" />
+    <Compile Include="Core\Interfaces\IDrawable.cs" />
+    <Compile Include="Core\Primitives\Sphere.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Glu.cs" />

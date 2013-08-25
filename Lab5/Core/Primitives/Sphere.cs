@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Lab5.Core.Interfaces;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Lab5.Primitives
+namespace Lab5.Core.Primitives
 {
-    class Sphere : IDrawable
+    public class Sphere : IDrawable
     {
         private Vector3 _center;
         private float _radius;
@@ -34,7 +31,7 @@ namespace Lab5.Primitives
             var twoPIThroughPrecision = MathHelper.Pi * 2 * oneThroughPrecision;
 
             float theta1, theta2, theta3;
-            Vector3 Normal, Position;
+            Vector3 normal, position;
 
             for (uint j = 0; j < _precision / 2; j++)
             {
@@ -47,27 +44,27 @@ namespace Lab5.Primitives
                 {
                     theta3 = i * twoPIThroughPrecision;
 
-                    Normal.X = (float)(Math.Cos(theta2) * Math.Cos(theta3));
-                    Normal.Y = (float)Math.Sin(theta2);
-                    Normal.Z = (float)(Math.Cos(theta2) * Math.Sin(theta3));
-                    Position.X = _center.X + _radius * Normal.X;
-                    Position.Y = _center.Y + _radius * Normal.Y;
-                    Position.Z = _center.Z + _radius * Normal.Z;
+                    normal.X = (float)(Math.Cos(theta2) * Math.Cos(theta3));
+                    normal.Y = (float)Math.Sin(theta2);
+                    normal.Z = (float)(Math.Cos(theta2) * Math.Sin(theta3));
+                    position.X = _center.X + _radius * normal.X;
+                    position.Y = _center.Y + _radius * normal.Y;
+                    position.Z = _center.Z + _radius * normal.Z;
 
-                    GL.Normal3(Normal);
+                    GL.Normal3(normal);
                     GL.TexCoord2(i * oneThroughPrecision, 2.0f * (j + 1) * oneThroughPrecision);
-                    GL.Vertex3(Position);
+                    GL.Vertex3(position);
 
-                    Normal.X = (float)(Math.Cos(theta1) * Math.Cos(theta3));
-                    Normal.Y = (float)Math.Sin(theta1);
-                    Normal.Z = (float)(Math.Cos(theta1) * Math.Sin(theta3));
-                    Position.X = _center.X + _radius * Normal.X;
-                    Position.Y = _center.Y + _radius * Normal.Y;
-                    Position.Z = _center.Z + _radius * Normal.Z;
+                    normal.X = (float)(Math.Cos(theta1) * Math.Cos(theta3));
+                    normal.Y = (float)Math.Sin(theta1);
+                    normal.Z = (float)(Math.Cos(theta1) * Math.Sin(theta3));
+                    position.X = _center.X + _radius * normal.X;
+                    position.Y = _center.Y + _radius * normal.Y;
+                    position.Z = _center.Z + _radius * normal.Z;
 
-                    GL.Normal3(Normal);
+                    GL.Normal3(normal);
                     GL.TexCoord2(i * oneThroughPrecision, 2.0f * j * oneThroughPrecision);
-                    GL.Vertex3(Position);
+                    GL.Vertex3(position);
                 }
                 GL.End();
             }

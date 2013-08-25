@@ -12,17 +12,17 @@ namespace Lab5
         [STAThread]
         private static void Main(string[] args)
         {
-            var aa_modes = new List<int>();
-            int aa = 0;
+            var aaModes = new List<int>();
+            var aa = 0;
             do
             {
                 var mode = new GraphicsMode(32, 0, 0, aa);
-                if (!aa_modes.Contains(mode.Samples))
-                    aa_modes.Add(aa);
+                if (!aaModes.Contains(mode.Samples))
+                    aaModes.Add(aa);
                 aa += 2;
             } while (aa <= 32);
 
-            using (MainWindow win = new MainWindow(aa_modes[aa_modes.Count - 1]))
+            using (var win = new MainWindow(aaModes[aaModes.Count - 1]))
             {
                 win.Run();
             }

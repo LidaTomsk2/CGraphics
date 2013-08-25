@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
+using Lab5.Core.Interfaces;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace Lab5.Primitives
+namespace Lab5.Core.Primitives
 {
     public class Cube : IDrawable
     {
@@ -24,7 +20,7 @@ namespace Lab5.Primitives
 
         public void Draw()
         {
-            GL.Translate(-1 * _center);
+            GL.Translate(_center);
             GL.Begin(BeginMode.Quads);
             GL.Color3(_color);
             
@@ -65,7 +61,7 @@ namespace Lab5.Primitives
             GL.Vertex3(_size.X, -_size.Y, _size.Z);
             
             GL.End();
-            GL.Translate(_center);
+            GL.Translate(-1 * _center);
         }
     }
 }

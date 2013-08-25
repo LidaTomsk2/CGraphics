@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab5.Primitives
+namespace Lab5.Core.Primitives
 {
-    public interface IDrawable
+    public class House
     {
-        void Draw();
     }
 }
