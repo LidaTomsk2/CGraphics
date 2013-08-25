@@ -18,7 +18,7 @@ namespace Lab5.Core.Effects
             set
             {
                 _position = value;
-                _sphere = new Sphere(new Vector3(_position.X, _position.Y, _position.Z), 0.1f, 10, Color.White);
+                _sphere = new Sphere(_position.Xyz, 0.1f, 10, Color.White);
             }
         }
 
@@ -36,8 +36,7 @@ namespace Lab5.Core.Effects
             GL.Light(LightName.Light0, LightParameter.Position, Position);
             if (IsAttenuationEnabled)
             {
-                // убывание интенсивности с расстоянием
-                // задано функцией f(d) = 1.0 / (0.4 * d * d + 0.2 * d)
+                // убывание интенсивности с расстоянием задано функцией f(d) = 1.0 / (0.1 * d * d + 0.1 * d)
                 GL.Light(LightName.Light0, LightParameter.ConstantAttenuation, 0f);
                 GL.Light(LightName.Light0, LightParameter.LinearAttenuation, .1f);
                 GL.Light(LightName.Light0, LightParameter.QuadraticAttenuation, .1f);

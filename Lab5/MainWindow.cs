@@ -15,11 +15,12 @@ namespace Lab5
     {
         private Point _mousePrevious, _mouseCurrent;
         private readonly IEnumerable<IDrawable> _drawables;
-        private readonly Lightning _lightning;
+        private readonly Lightning _lightning = new Lightning(new Vector4(0, 5, 4, 0));
         private readonly Camera _camera = new Camera();
+        private readonly Fog _fog = new Fog();
 
         public MainWindow(int samples)
-            : base(800, 600, new OpenTK.Graphics.GraphicsMode(32, 16, 0, samples))
+            : base(800, 600, new OpenTK.Graphics.GraphicsMode(32, 16, 8, samples))
         {
             Title = "Lab5";
             VSync = VSyncMode.On;
@@ -37,11 +38,13 @@ namespace Lab5
             GL.Enable(EnableCap.Light0);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.ColorMaterial);
+
             GL.ShadeModel(ShadingModel.Smooth);
+            
 
             _drawables = new List<IDrawable>
                          {
-                             //new Cube(new Vector3(0, -1, -1), new Vector3(1f, 1f, 1f), Color.White),
+                             new Cube(new Vector3(3, 1, 0), new Vector3(1, 1, 1), Color.Red),
                              new Sphere(new Vector3(1, 1, 0), 1f, 30, Color.Yellow),
                              new Sphere(new Vector3(-1, 1, 0), 1f, 30, Color.Yellow),
                              new Sphere(new Vector3(-1, 1, -3), 1f, 30, Color.Yellow),
@@ -50,8 +53,6 @@ namespace Lab5
                              new Sphere(new Vector3(-7, 1, 0), 1f, 30, Color.Yellow),
                              new CoordGrid(5f)
                          };
-
-            _lightning = new Lightning(new Vector4(0, 5, 4, 0));
         }
 
         private void MouseOnMove(object sender, MouseMoveEventArgs e)
@@ -100,6 +101,9 @@ namespace Lab5
                     break;
                 case Key.Keypad2:
                     _lightning.IsAttenuationEnabled = !_lightning.IsAttenuationEnabled;
+                    break;
+                case Key.Keypad3:
+                    if (GL.IsEnabled(EnableCap.Fog)) _fog.Disable(); else _fog.Enable();
                     break;
             }
         }
@@ -162,6 +166,7 @@ namespace Lab5
                     GL.Vertex3(-10 + j, 0, -10 + i + 1);
                 }
             }
+
             GL.End();
             
             SwapBuffers();

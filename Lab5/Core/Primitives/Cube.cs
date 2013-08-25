@@ -29,7 +29,7 @@ namespace Lab5.Core.Primitives
             GL.Vertex3(_size.X, -_size.Y, _size.Z);
             GL.Vertex3(_size.X, _size.Y, _size.Z);
             GL.Vertex3(-_size.X, _size.Y, _size.Z);
-            
+
             // BACK
             GL.Vertex3(-_size.X, -_size.Y, -_size.Z);
             GL.Vertex3(-_size.X, _size.Y, -_size.Z);
