@@ -32,5 +32,39 @@ namespace CGraphics
             lab1.ShowDialog();
             Show();
         }
+
+        private void BtnLab2OpenClick(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            var lab2 = new Lab2.MainWindow();
+            lab2.ShowDialog();
+            Show();
+        }
+
+        private void BtnLab3OpenClick(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            var lab3 = new Lab3.MainWindow();
+            lab3.ShowDialog();
+            Show();
+        }
+
+        private void BtnLab4OpenClick(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            var lab4 = new Lab4.MainWindow();
+            lab4.ShowDialog();
+            Show();
+        }
+
+        private void BtnLab5OpenClick(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            using (var lab5 = new Lab5.MainWindow(8))
+            {
+                lab5.Run();
+            }
+            Show();
+        }
     }
 }

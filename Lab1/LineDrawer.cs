@@ -12,95 +12,109 @@ namespace Lab1
     public class LineDrawer
     {
         public int PixelSize { get; set; }
-        public Color Color { get; set; }
+        public Color CurrentColor { get; set; }
 
         private readonly WriteableBitmap _bmp;
         public LineDrawer(WriteableBitmap bmp)
         {
             _bmp = bmp;
-            Color = Colors.Black;
+            CurrentColor = Colors.Black;
             PixelSize = 1;
         }
 
         private void DrawPixel(int x, int y)
         {
-            _bmp.FillRectangle(x, y, x + PixelSize - 1, y + PixelSize - 1, Color);
+            _bmp.FillRectangle(x, y, x + PixelSize - 1, y + PixelSize - 1, CurrentColor);
         }
 
-        private void DrawPixel(bool steep, int x, int y, float intense)
+        public void DrawLineBrezenham(int x1, int y1, int x2, int y2)
         {
-            if (steep) Swap(ref x, ref y);
+            bool changeFlag;
+            int x = x1, y = y1;
+            int dx = Math.Abs(x2 - x1), dy = Math.Abs(y2 - y1);
+            int sx = Math.Sign(x2 - x1)*PixelSize, sy = Math.Sign(y2 - y1)*PixelSize;
 
-            var colorIntense = Convert.ToByte(Color.A*intense);
-            var color = Color.FromArgb(colorIntense, Color.R, Color.G, Color.B);
-            _bmp.FillRectangle(x, y, x + PixelSize - 1, y + PixelSize - 1, color);
-        }
-
-        private void Swap(ref int a, ref int b)
-        {
-            var z = a;
-            a = b;
-            b = z;
-        }
-
-        public void BresenhamLine(int x1, int y1, int x2, int y2)
-        {
-            var steep = Math.Abs(y2 - y1) > Math.Abs(x2 - x1);
-            // Отражаем линию по диагонали, если угол наклона слишком большой
-            if (steep)
+            if (dy > dx)
             {
-                Swap(ref x1, ref y1);
-                Swap(ref x2, ref y2);
+                var z = dx;
+                dx = dy;
+                dy = z;
+                changeFlag = true;
             }
-            // Если линия растёт не слева направо, то меняем начало и конец отрезка местами
-            if (x1 > x2)
+            else
             {
-                Swap(ref x1, ref x2);
-                Swap(ref y1, ref y2);
+                changeFlag = false;
             }
-            int dx = x2 - x1;
-            int dy = Math.Abs(y2 - y1);
-            int error = dx / 2; // Оптимизация с умножением на dx, чтобы избавиться от лишних дробей
-            int ystep = (y1 < y2) ? 1 : -1;
-            int y = y1;
-            for (int x = x1; x <= x2; x += PixelSize)
+
+            var e = 2 * dy - dx;
+            for (int i = 1; i <= dx; i += PixelSize)
             {
-                DrawPixel(steep ? y : x, steep ? x : y);
-                error -= dy;
-                if (error < 0)
+                DrawPixel(x, y);
+                while (e >= 0)
                 {
-                    y += ystep * PixelSize;
-                    error += dx;
+                    if (changeFlag)
+                    {
+                        x += sx;
+                    }
+                    else
+                    {
+                        y += sy;
+                    }
+                    e -= 2 * dx;
                 }
+                if (changeFlag)
+                {
+                    y += sy;
+                }
+                else
+                {
+                    x += sx;
+                }
+                e += 2 * dy;
             }
+            DrawPixel(x, y);
         }
 
-        public void WuLine(int x1, int y1, int x2, int y2)
+        public void DrawLineTrippleAliasing(int x1, int y1, int x2, int y2)
         {
-            var steep = Math.Abs(y2 - y1) > Math.Abs(x2 - x1);
-            if (steep)
-            {
-                Swap(ref x1, ref y1);
-                Swap(ref x2, ref y2);
-            }
-            if (x1 > x2)
-            {
-                Swap(ref x1, ref x2);
-                Swap(ref y1, ref y2);
-            }
+            var fromX = Math.Min(x1, x2);
+            var toX = Math.Max(x1, x2);
 
-            //DrawPixel(steep, x1, y1, 1);
-            //DrawPixel(steep, x2, y2, 1);
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float gradient = dy / dx;
-            float y = y1 + gradient;
-            for (var x = x1 + 1; x <= x2 - 1; x += PixelSize)
+            var tempColor = CurrentColor;
+            for (int curX = fromX; curX < toX; curX += PixelSize)
             {
-                DrawPixel(steep, x, (int)y, 1 - (y - (int)y));
-                DrawPixel(steep, x, (int)y + PixelSize, y - (int)y);
-                y += gradient*PixelSize;
+                CurrentColor = tempColor;
+                var curYFloat = y1 + (y2 - y1)*((curX - x1)/(float)(x2 - x1));
+                var curYRounded = Math.Round(curYFloat);
+                var c = curYRounded - curYFloat;
+
+                var b0 = (Math.Sqrt(Math.Pow((y2 - y1)/(float) (x2 - x1), 2) + 1 - 1)) / 2f;
+                double b1, b2, b3;
+                if (c >= 0)
+                {
+                    b1 = b0 + c;
+                    b3 = b0*(1 - 2*c);
+                }
+                else
+                {
+                    b1 = b0*(1 + 2*c);
+                    b3 = b0 - c;
+                }
+                b2 = 1 + Math.Abs(c)*(2*b0 - 1);
+
+                CurrentColor = new Color {A = (byte)(255*b1), R = CurrentColor.R, G = CurrentColor.G, B = CurrentColor.B};
+                DrawPixel(curX, (int)curYRounded-PixelSize);
+                CurrentColor = new Color {A = (byte)(255*b2), R = CurrentColor.R, G = CurrentColor.G, B = CurrentColor.B};
+                DrawPixel(curX, (int)curYRounded);
+                CurrentColor = new Color {A = (byte)(255*b3), R = CurrentColor.R, G = CurrentColor.G, B = CurrentColor.B};
+                DrawPixel(curX, (int)curYRounded+PixelSize);
             }
+            CurrentColor = tempColor;
+        }
+
+        public void DrawLineWu()
+        {
+            
         }
     }
 }

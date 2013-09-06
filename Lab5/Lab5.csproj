@@ -52,7 +52,6 @@
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\Effects\Fog.cs" />
     <Compile Include="Core\Effects\Lightning.cs" />
-    <Compile Include="Core\Primitives\House.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="Core\Primitives\CoordGrid.cs" />
     <Compile Include="Core\Primitives\Cube.cs" />
@@ -61,6 +60,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Glu.cs" />
+    <Compile Include="Utilities\TextureManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

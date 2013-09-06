@@ -12,7 +12,7 @@ namespace Lab4
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private IEnumerable<LSystemModel> _systems;
         public MainWindow()
@@ -32,7 +32,7 @@ namespace Lab4
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            _systems = LParser.ParseFiles(@"../../L-Systems");
+            _systems = LParser.ParseFiles(@"D:/PROJECTS/CGraphics/Lab4/L-Systems");
             foreach (var lSystemModel in _systems)
             {
                 CbSystems.Items.Add(lSystemModel.Name);

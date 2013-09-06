@@ -13,6 +13,7 @@
             <ComboBox x:Name="cbAlgType">
                 <ComboBoxItem Content="Брезенхем" IsSelected="True" />
                 <ComboBoxItem Content="Ву" />
+                <ComboBoxItem Content="Приближенный" />
             </ComboBox>
             <Separator />
             <TextBlock Text=" Размер пиксела: " VerticalAlignment="Center" />

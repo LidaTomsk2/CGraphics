@@ -2,6 +2,7 @@
 using System.Drawing;
 using Lab5.Core.Interfaces;
 using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 namespace Lab5.Core.Primitives
@@ -12,6 +13,8 @@ namespace Lab5.Core.Primitives
         private float _radius;
         private readonly uint _precision;
         private readonly Color _color;
+
+        public bool IsGoldMaterial { get; set; }
 
         public Sphere(Vector3 center, float radius, uint precision, Color color)
         {
@@ -33,13 +36,26 @@ namespace Lab5.Core.Primitives
             float theta1, theta2, theta3;
             Vector3 normal, position;
 
+            if (IsGoldMaterial)
+            {
+                GL.Color3(Color.Gold);
+                GL.Material(MaterialFace.Front, MaterialParameter.Ambient, new Color4(0.24725f, 0.1995f, 0.0745f, 1));
+                GL.Material(MaterialFace.Front, MaterialParameter.Diffuse, new Color4(0.75164f, 0.60648f, 0.22648f, 1));
+                GL.Material(MaterialFace.Front, MaterialParameter.Specular, new Color4(0.628281f, 0.555802f, 0.366065f, 1));
+                GL.Material(MaterialFace.Front, MaterialParameter.Shininess, new Color4(0.628281f, 0.555802f, 0.366065f, 51.2f));
+            }
+            else
+            {
+                GL.Color3(_color);
+            }
+
             for (uint j = 0; j < _precision / 2; j++)
             {
                 theta1 = (j * twoPIThroughPrecision) - halfPI;
                 theta2 = ((j + 1) * twoPIThroughPrecision) - halfPI;
 
                 GL.Begin(BeginMode.TriangleStrip);
-                GL.Color3(_color);
+                
                 for (uint i = 0; i <= _precision; i++)
                 {
                     theta3 = i * twoPIThroughPrecision;
@@ -68,6 +84,11 @@ namespace Lab5.Core.Primitives
                 }
                 GL.End();
             }
+
+            GL.Material(MaterialFace.Front, MaterialParameter.Ambient, new Color4(0, 0, 0, 1));
+            GL.Material(MaterialFace.Front, MaterialParameter.Diffuse, new Color4(0.1f, 0.5f, 0.8f, 1));
+            GL.Material(MaterialFace.Front, MaterialParameter.Specular, new Color4(0, 0, 0, 1));
+            GL.Material(MaterialFace.Front, MaterialParameter.Shininess, 0);
         }
     }
 }

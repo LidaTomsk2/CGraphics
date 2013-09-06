@@ -81,7 +81,7 @@ namespace Lab3
             {
                 var warpMatr = WarpMatrix.GetWarpMatrix(_firstPoints, _secondPoints);
 
-                var filterType = FilterType.Trilinear;
+                var filterType = FilterType.Bilinear;
                 IFilter filter;
                 switch (filterType)
                 {

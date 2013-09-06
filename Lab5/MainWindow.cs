@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Lab5.Core;
 using Lab5.Core.Effects;
 using Lab5.Core.Interfaces;
@@ -41,14 +42,25 @@ namespace Lab5
 
             GL.ShadeModel(ShadingModel.Smooth);
             
-
             _drawables = new List<IDrawable>
                          {
-                             new Cube(new Vector3(3, 1, 0), new Vector3(1, 1, 1), Color.Red),
+                             new Cube(new Vector3(4, 1, -3), new Vector3(1, 1, 1), Color.Red),
+                             new Cube(new Vector3(4, 1, 0), new Vector3(1, 1, 1), Color.White)
+                             {
+                                 IsTextured = true
+                             },
+                             new Cube(new Vector3(4, 1, 3), new Vector3(1, 1, 1), Color.White)
+                             {
+                                 IsRotating = true, 
+                                 IsTextured = true
+                             },
                              new Sphere(new Vector3(1, 1, 0), 1f, 30, Color.Yellow),
                              new Sphere(new Vector3(-1, 1, 0), 1f, 30, Color.Yellow),
                              new Sphere(new Vector3(-1, 1, -3), 1f, 30, Color.Yellow),
-                             new Sphere(new Vector3(-3, 1, 0), 1f, 30, Color.Yellow),
+                             new Sphere(new Vector3(-3, 1, 0), 1f, 30, Color.Yellow)
+                             {
+                                 IsGoldMaterial = true
+                             },
                              new Sphere(new Vector3(-5, 1, 0), 1f, 30, Color.Yellow),
                              new Sphere(new Vector3(-7, 1, 0), 1f, 30, Color.Yellow),
                              new CoordGrid(5f)
@@ -66,12 +78,12 @@ namespace Lab5
             _mousePrevious.Y = _mouseCurrent.Y;
         }
 
-        void MouseButtonUp(object sender, MouseButtonEventArgs e)
+        private void MouseButtonUp(object sender, MouseButtonEventArgs e)
         {
             _camera.CameraMode = Camera.ECameraMode.CAMERA_NONE;
         }
 
-        void MouseButtonDown(object sender, MouseButtonEventArgs e)
+        private void MouseButtonDown(object sender, MouseButtonEventArgs e)
         {
             switch (e.Button)
             {
@@ -87,8 +99,7 @@ namespace Lab5
             _mouseCurrent.Y = Mouse.Y;
         }
 
-        // разовые события
-        void KeyboardKeyDown(object sender, KeyboardKeyEventArgs e)
+        private void KeyboardKeyDown(object sender, KeyboardKeyEventArgs e)
         {
             switch (e.Key)
             {

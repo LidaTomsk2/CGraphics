@@ -4,5 +4,9 @@
         Title="Компьютерная графика" Height="350" Width="525" Topmost="True">
     <Grid>
         <Button Margin="10,10,333,235" Content="Lab1: Рисование линий" Click="BtnLab1OpenClick"/>
+        <Button Margin="10,89,333,156" Content="Lab2: Рисование сплайнов" Click="BtnLab2OpenClick"/>
+        <Button Margin="10,168,333,77" Content="Lab3: Фильтрация" Click="BtnLab3OpenClick"/>
+        <Button Margin="189,52,154,193" Content="Lab4: Фракталы" Click="BtnLab4OpenClick"/>
+        <Button Margin="189,131,154,114" Content="Lab5: OpenGL" Click="BtnLab5OpenClick"/>
     </Grid>
 </Window>
