@@ -23,6 +23,7 @@ namespace Lab3.Filtering
 
         public Bitmap GetFilteredImage()
         {
+            InitMipMaps(32);
             var resultBmp = new Bitmap(_bmp.Width, _bmp.Height);
             
             // фильтрация
@@ -36,11 +37,9 @@ namespace Lab3.Filtering
                     // проверка на запись в пустую память
                     if (xNew < 0 || Math.Ceiling(xNew) >= resultBmp.Width ||
                         yNew < 0 || Math.Ceiling(yNew) >= resultBmp.Height) continue;
+                    var reduct = GetReductionLevel(i, j, xNew, yNew);
 
-                    //var c1M = mm1.GetPixel((int) xNew / k1M, (int) yNew / k1M);
-                    //var c2M = mm2.GetPixel((int) xNew / k2M, (int) yNew / k2M);
-                    //var resultColor = c1M.Multiply(k2M - k).Add(c2M.Multiply(k - k1M)).Divide(k1M);
-                    var resultColor = GetCorrectColor(i, j); // О_О
+                    var resultColor = GetResultColor(i, j);
                     resultBmp.SetPixel(i, j, resultColor);
                 }
             }
@@ -70,25 +69,26 @@ namespace Lab3.Filtering
             return mipMaps.ToArray();
         }
 
-        private Color GetCorrectColor(int i, int j)
+        private int GetReductionLevel(int targetI, int targetJ, double fromX, double fromY)
         {
-            var xNew = _warpMatrix[0, 0] + _warpMatrix[0, 1] * i + _warpMatrix[0, 2] * j;
-            i++;
-            var xNew2 = _warpMatrix[0, 0] + _warpMatrix[0, 1] * i + _warpMatrix[0, 2] * j;
+            return 3;
+        }
 
-            i--;
-            var yNew = _warpMatrix[1, 0] + _warpMatrix[1, 1] * i + _warpMatrix[1, 2] * j;
-            j++;
-            var yNew2 = _warpMatrix[1, 0] + _warpMatrix[1, 1] * i + _warpMatrix[1, 2] * j;
+        private Color GetResultColor(int i, int j)
+        {
+            var reduct = 3;
 
-            var kx = Math.Abs(xNew - xNew2);
-            var ky = Math.Abs(yNew - yNew2);
+            var xm = _warpMatrix[0, 0] + _warpMatrix[0, 1]*i + _warpMatrix[0, 2]*j;
+            var ym = _warpMatrix[1, 0] + _warpMatrix[1, 1]*i + _warpMatrix[1, 2]*j;
+            var im = _mipMaps[2].GetPixel((int)xm, (int)ym);
 
-            var k = (kx + ky)/2;
-            var lowM = (int) k;
-            var highM = (int) k + 1;
+            var mm2 = _mipMaps[4];
+            var xm2 = (int)(_warpMatrix[0, 0] + _warpMatrix[0, 1] * i + _warpMatrix[0, 2] * j);
+            var ym2 = _warpMatrix[1, 0] + _warpMatrix[1, 1] * i + _warpMatrix[1, 2] * j;
+            Color im2;
+            if (xm2 < 0 || xm2 > mm2.Width) im2 = Color.Empty; else im2 = _mipMaps[4].GetPixel(xm2, (int)ym2);
 
-            return new Color(); // TODO: СДЕЛАТЬ ЧТО-ТО
+            return im.Multiply(4 - reduct).Divide(2).Add(im2.Multiply(reduct - 2).Divide(2));
         }
     }
 }

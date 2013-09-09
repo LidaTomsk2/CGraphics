@@ -22,9 +22,10 @@ namespace Lab1
             PixelSize = 1;
         }
 
-        private void DrawPixel(int x, int y)
+        private void DrawPixel(int x, int y, double br)
         {
-            _bmp.FillRectangle(x, y, x + PixelSize - 1, y + PixelSize - 1, CurrentColor);
+            var color = new Color { A = (byte)(255 * br), R = CurrentColor.R, G = CurrentColor.G, B = CurrentColor.B };
+            _bmp.FillRectangle(x, y, x + PixelSize - 1, y + PixelSize - 1, color);
         }
 
         public void DrawLineBrezenham(int x1, int y1, int x2, int y2)
@@ -32,7 +33,7 @@ namespace Lab1
             bool changeFlag;
             int x = x1, y = y1;
             int dx = Math.Abs(x2 - x1), dy = Math.Abs(y2 - y1);
-            int sx = Math.Sign(x2 - x1)*PixelSize, sy = Math.Sign(y2 - y1)*PixelSize;
+            int sx = Math.Sign(x2 - x1) * PixelSize, sy = Math.Sign(y2 - y1) * PixelSize;
 
             if (dy > dx)
             {
@@ -49,7 +50,7 @@ namespace Lab1
             var e = 2 * dy - dx;
             for (int i = 1; i <= dx; i += PixelSize)
             {
-                DrawPixel(x, y);
+                DrawPixel(x, y, 1);
                 while (e >= 0)
                 {
                     if (changeFlag)
@@ -72,49 +73,104 @@ namespace Lab1
                 }
                 e += 2 * dy;
             }
-            DrawPixel(x, y);
+            DrawPixel(x, y, 1);
         }
 
         public void DrawLineTrippleAliasing(int x1, int y1, int x2, int y2)
         {
-            var fromX = Math.Min(x1, x2);
-            var toX = Math.Max(x1, x2);
-
-            var tempColor = CurrentColor;
-            for (int curX = fromX; curX < toX; curX += PixelSize)
+            var steep = Math.Abs(y2 - y1) > Math.Abs(x2 - x1);
+            if (steep)
             {
-                CurrentColor = tempColor;
-                var curYFloat = y1 + (y2 - y1)*((curX - x1)/(float)(x2 - x1));
+                Swap(ref x1, ref y1);
+                Swap(ref x2, ref y2);
+            }
+            if (x1 > x2)
+            {
+                Swap(ref x1, ref x2);
+                Swap(ref y1, ref y2);
+            }
+
+            for (int curX = x1; curX < x2; curX += PixelSize)
+            {
+                var curYFloat = y1 + (y2 - y1) * ((curX - x1) / (float)(x2 - x1));
+                
                 var curYRounded = Math.Round(curYFloat);
                 var c = curYRounded - curYFloat;
 
-                var b0 = (Math.Sqrt(Math.Pow((y2 - y1)/(float) (x2 - x1), 2) + 1 - 1)) / 2f;
-                double b1, b2, b3;
+                var b0 = (Math.Sqrt(Math.Pow((y2 - y1) / (float)(x2 - x1), 2) + 1 - 1)) / 2f;
+                double b1, b3;
                 if (c >= 0)
                 {
                     b1 = b0 + c;
-                    b3 = b0*(1 - 2*c);
+                    b3 = b0 * (1 - 2 * c);
                 }
                 else
                 {
-                    b1 = b0*(1 + 2*c);
+                    b1 = b0 * (1 + 2 * c);
                     b3 = b0 - c;
                 }
-                b2 = 1 + Math.Abs(c)*(2*b0 - 1);
+                var b2 = 1 + Math.Abs(c) * (2 * b0 - 1);
 
-                CurrentColor = new Color {A = (byte)(255*b1), R = CurrentColor.R, G = CurrentColor.G, B = CurrentColor.B};
-                DrawPixel(curX, (int)curYRounded-PixelSize);
-                CurrentColor = new Color {A = (byte)(255*b2), R = CurrentColor.R, G = CurrentColor.G, B = CurrentColor.B};
-                DrawPixel(curX, (int)curYRounded);
-                CurrentColor = new Color {A = (byte)(255*b3), R = CurrentColor.R, G = CurrentColor.G, B = CurrentColor.B};
-                DrawPixel(curX, (int)curYRounded+PixelSize);
+                DrawPixel(steep, curX, (int)curYRounded - PixelSize, b1);
+                DrawPixel(steep, curX, (int)curYRounded, b2);
+                DrawPixel(steep, curX, (int)curYRounded + PixelSize, b3);
             }
-            CurrentColor = tempColor;
         }
 
-        public void DrawLineWu()
+        public void DrawLineWu(int x1, int y1, int x2, int y2)
         {
-            
+            var steep = Math.Abs(y2 - y1) > Math.Abs(x2 - x1);
+            if (steep)
+            {
+                Swap(ref x1, ref y1);
+                Swap(ref x2, ref y2);
+            }
+            if (x1 > x2)
+            {
+                Swap(ref x1, ref x2);
+                Swap(ref y1, ref y2);
+            }
+
+            DrawPixel(steep, x1, y1, 1);
+            DrawPixel(steep, x2, y2, 1);
+            float dx = x2 - x1;
+            float dy = y2 - y1;
+            var gradient = dy / dx;
+
+            var y = gradient;
+            var yPos = y1;
+            for (var x = x1 + 1; x <= x2 - 1; x += PixelSize)
+            {
+                var br = y - (int) y;
+                DrawPixel(steep, x, (int) yPos, 1 - br);
+                DrawPixel(steep, x, (int) yPos + PixelSize, br);
+                y += gradient;
+
+                if (Math.Abs(y) > 1)
+                {
+                    y = (Math.Abs(y) - 1)*Math.Sign(gradient);
+                    yPos += PixelSize*Math.Sign(gradient);
+                }
+            }
+        }
+        
+        private static void Swap<T>(ref T lhs, ref T rhs)
+        {
+            var temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
+
+        public void DrawPixel(bool steep, int x, int y, double br)
+        {
+            if (!steep)
+            {
+                DrawPixel(x, y, br);
+            }
+            else
+            {
+                DrawPixel(y, x, br);
+            }
         }
     }
 }

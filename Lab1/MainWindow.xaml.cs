@@ -63,8 +63,8 @@ namespace Lab1
             var point = mouseEventArgs.GetPosition(image);
             if (point.X >= image.ActualWidth || point.X <= 0 || point.Y >= image.ActualHeight || point.Y <= 0) return;
 
-            int x1 = Convert.ToInt16(_fromPoint.X), y1 = Convert.ToInt16(_fromPoint.Y);
-            int x2 = Convert.ToInt16(point.X), y2 = Convert.ToInt16(point.Y);
+            int x1 = (int)_fromPoint.X, y1 = (int)_fromPoint.Y;
+            int x2 = (int)point.X, y2 = (int)point.Y;
 
             switch (cbAlgType.SelectedIndex)
             {
@@ -72,6 +72,9 @@ namespace Lab1
                     _lineDrawer.DrawLineBrezenham(x1, y1, x2, y2);
                     return;
                 case 1:
+                    _lineDrawer.DrawLineWu(x1, y1, x2, y2);
+                    return;
+                case 2:
                     _lineDrawer.DrawLineTrippleAliasing(x1, y1, x2, y2);
                     return;
             }
