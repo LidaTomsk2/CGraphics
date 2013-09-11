@@ -78,6 +78,7 @@
     <Compile Include="DrawElements\Lines\BezierLine.cs" />
     <Compile Include="DrawElements\Lines\LineFigure.cs" />
     <Compile Include="DrawElements\Lines\LineSimple.cs" />
+    <Compile Include="DrawElements\Lines\Spline.cs" />
     <Compile Include="DrawElements\LineTransformManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -85,6 +86,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MathHelper\SplineInterpolator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

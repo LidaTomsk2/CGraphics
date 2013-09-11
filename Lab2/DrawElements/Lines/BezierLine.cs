@@ -17,6 +17,7 @@ namespace Lab2.DrawElements.Lines
         protected override void DrawGeometry(StreamGeometryContext context)
         {
             context.BeginFigure(FromPoint, true, false);
+            
             for (float step = 0; step <= 1; step += 0.01f)
             {
                 context.LineTo(GetPoint(step, FromPoint, TargetPoint), true, true);
@@ -37,12 +38,12 @@ namespace Lab2.DrawElements.Lines
             var ax = p3.X - p0.X - cx - bx;
             var ay = p3.Y - p0.Y - cy - by;
 
-            var cube = t * t * t;
-            var square = t * t;
+            var cube = Math.Pow(t, 3);
+            var square = Math.Pow(t, 2);
 
             var resX = (ax * cube) + (bx * square) + (cx * t) + p0.X;
             var resY = (ay * cube) + (by * square) + (cy * t) + p0.Y;
-
+            
             return new Point(resX, resY);
         }
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using Lab2.DrawElements.Controls;
 using Lab2.DrawElements.Lines;
 
@@ -24,7 +25,17 @@ namespace Lab2.DrawElements
         {
             var line = new LineSimple();
             line.SplitPressEventHandler += LineOnSplitPressEventHandler;
-            line.MouseRightButtonDown += (sender, args) => TransformToBezier(line);
+            line.MouseRightButtonDown += (sender, args) =>
+                                         {
+                                             if (Keyboard.IsKeyDown(Key.LeftAlt))
+                                             {
+                                                 TransformToSpline(line);   
+                                             }
+                                             else
+                                             {
+                                                 TransformToBezier(line);
+                                             }
+                                         };
 
             return line;
         }
@@ -72,7 +83,6 @@ namespace Lab2.DrawElements
         public void TransformToBezier(LineFigure figure)
         {
             _canvas.Children.Remove(figure);
-
             var bezierLine = new BezierLine();
             figure.LeftLineConnector.RightFigure = bezierLine;
             figure.LeftLineConnector.UpdateLinks();
@@ -89,7 +99,34 @@ namespace Lab2.DrawElements
 
         public void TransformToSpline(LineFigure figure)
         {
-            //TODO
+            var lines = _canvas.Children.OfType<LineFigure>().ToList();
+            foreach (var lineFigure in lines)
+            {
+                _canvas.Children.Remove(lineFigure);
+            }
+            
+            var spline = new Spline();
+
+            var connector = _canvas.Children.OfType<LineConnector>().First();
+            var firstConnector = connector;
+
+            var cons = new List<LineConnector>() {connector};
+            while (connector.RightFigure != null)
+            {
+                cons.Add(connector.RightFigure.RightLineConnector);
+                connector.LeftFigure = spline;
+                connector = connector.RightFigure.RightLineConnector;
+            }
+
+            firstConnector.RightFigure = spline;
+            firstConnector.UpdateLinks();
+            connector.LeftFigure = spline;
+            connector.UpdateLinks();
+            
+
+            spline.Connectors = cons;
+
+            _canvas.Children.Add(spline);
         }
     }
 }
