@@ -9,7 +9,7 @@ using MathNet.Numerics.LinearAlgebra.Generic;
 
 namespace Lab3
 {
-    class WarpMatrix
+    public class WarpMatrix
     {
         public static Matrix<double> GetWarpMatrix(List<Point> fPoints, List<Point> sPoints)
         {

@@ -53,6 +53,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="DrawElements\Controls\BezierControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DrawElements\Controls\LineConnector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -61,7 +69,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DrawElements\Lines\Line.cs" />
+    <Compile Include="DrawElements\Controls\BezierControl.xaml.cs">
+      <DependentUpon>BezierControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DrawElements\Controls\LineConnector.xaml.cs">
+      <DependentUpon>LineConnector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DrawElements\Lines\BezierLine.cs" />
+    <Compile Include="DrawElements\Lines\LineFigure.cs" />
+    <Compile Include="DrawElements\Lines\LineSimple.cs" />
+    <Compile Include="DrawElements\LineTransformManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -94,9 +111,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DrawElements\Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

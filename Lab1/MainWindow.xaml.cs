@@ -23,7 +23,7 @@ namespace Lab1
         readonly WriteableBitmap _bmp;
         private Point _fromPoint;
         private readonly LineDrawer _lineDrawer;
-        private bool _isLeftBtnPressed = false;
+        private bool _isLeftBtnPressed;
 
         public MainWindow()
         {

@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Lab2.DrawElements;
+using Lab2.DrawElements.Controls;
 using Lab2.DrawElements.Lines;
 
 namespace Lab2
@@ -21,23 +23,18 @@ namespace Lab2
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly LineTransformManager _lineManager;
         public MainWindow()
         {
             InitializeComponent();
+            _lineManager = new LineTransformManager(DrawCanvas);
+
             Loaded += OnLoaded;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            var line = new Line {X1 = 10, Y1 = 10, X2 = 100, Y2 = 100, StrokeThickness = 2, Stroke = Brushes.Black};
-            line.DataContext = new LineItem
-                               {
-                                   StartPoint = new Point(line.X1, line.Y1),
-                                   EndPoint = new Point(line.X2, line.Y2)
-                               };
-            var adorner = new LineAdorner(line);
-            DrawCanvas.Children.Add(line);
-            DrawCanvas.Children.Add(adorner);
+            _lineManager.CreateLineSimple(new Point(30, 30), new Point(100, 30));
         }
     }
 }

@@ -92,12 +92,13 @@ namespace Lab1
 
             for (int curX = x1; curX < x2; curX += PixelSize)
             {
-                var curYFloat = y1 + (y2 - y1) * ((curX - x1) / (float)(x2 - x1));
-                
+                double curYFloat = y1 + (y2 - y1) * ((curX - x1) / (float)(x2 - x1));
+                //curYFloat = Math.Round(curYFloat/PixelSize)*PixelSize;
+
                 var curYRounded = Math.Round(curYFloat);
                 var c = curYRounded - curYFloat;
 
-                var b0 = (Math.Sqrt(Math.Pow((y2 - y1) / (float)(x2 - x1), 2) + 1 - 1)) / 2f;
+                var b0 = (Math.Sqrt(Math.Pow((y2 - y1) / (float)(x2 - x1), 2))) / 2f;
                 double b1, b3;
                 if (c >= 0)
                 {
@@ -142,8 +143,8 @@ namespace Lab1
             for (var x = x1 + 1; x <= x2 - 1; x += PixelSize)
             {
                 var br = y - (int) y;
-                DrawPixel(steep, x, (int) yPos, 1 - br);
-                DrawPixel(steep, x, (int) yPos + PixelSize, br);
+                DrawPixel(steep, x, yPos, 1 - br);
+                DrawPixel(steep, x, yPos + PixelSize, br);
                 y += gradient;
 
                 if (Math.Abs(y) > 1)
