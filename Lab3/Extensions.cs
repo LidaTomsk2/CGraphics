@@ -25,6 +25,16 @@ namespace Lab3
         }
 
 
+        public static Color GetTrilinearColor(Color c1, Color c2, int topReduct, int lowReduct, double reduct)
+        {
+            var a = (c1.A * (topReduct - reduct) + c2.A * (reduct - lowReduct)) / lowReduct;
+            var r = (c1.R * (topReduct - reduct) + c2.R * (reduct - lowReduct)) / lowReduct;
+            var g = (c1.G * (topReduct - reduct) + c2.G * (reduct - lowReduct)) / lowReduct;
+            var b = (c1.B * (topReduct - reduct) + c2.B * (reduct - lowReduct)) / lowReduct;
+            return Color.FromArgb((int) a, (int) r, (int) g, (int) b);
+        }
+
+
         /// <summary>
         /// Увеличить цвет на параметры другого цвета
         /// </summary>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Lab2.DrawElements.Controls;
 using Lab2.DrawElements.Lines;
@@ -38,6 +39,18 @@ namespace Lab2.DrawElements
                                          };
 
             return line;
+        }
+
+        private Spline CreateSpline()
+        {
+            var spline = new Spline();
+            spline.MouseLeftButtonDown += (sender, args) =>
+            {
+                if (Keyboard.IsKeyDown(Key.LeftAlt))
+                    ConvertSplineToLine(spline, args.GetPosition(_canvas));
+            };
+
+            return spline;
         }
 
         public LineSimple CreateLineSimple(Point fromPoint, Point targetPoint)
@@ -104,29 +117,103 @@ namespace Lab2.DrawElements
             {
                 _canvas.Children.Remove(lineFigure);
             }
-            
-            var spline = new Spline();
 
-            var connector = _canvas.Children.OfType<LineConnector>().First();
+            var spline = CreateSpline();
+
+            var connector = _canvas.Children.OfType<LineConnector>().First(x => x.LeftFigure == null);
             var firstConnector = connector;
+            var lastConnector = _canvas.Children.OfType<LineConnector>().First(x => x.RightFigure == null);
 
             var cons = new List<LineConnector>() {connector};
-            while (connector.RightFigure != null)
+            while (!Equals(connector, lastConnector))
             {
                 cons.Add(connector.RightFigure.RightLineConnector);
                 connector.LeftFigure = spline;
+                connector.UpdateLinks();
                 connector = connector.RightFigure.RightLineConnector;
             }
+            foreach (var lineCon in _canvas.Children.OfType<LineConnector>())
+            {
+                lineCon.RightFigure = spline;
+                lineCon.UpdateLinks();
+            }
 
+            firstConnector.LeftFigure = null;
             firstConnector.RightFigure = spline;
             firstConnector.UpdateLinks();
             connector.LeftFigure = spline;
+            connector.RightFigure = null;
             connector.UpdateLinks();
             
 
             spline.Connectors = cons;
 
             _canvas.Children.Add(spline);
+        }
+
+        private void ConvertSplineToLine(Spline spline, Point clickPoint)
+        {
+            LineConnector fromConnector = null, toConnector = null;
+            for (int i = 0; i < spline.Connectors.Count - 1; i++)
+            {
+                if (spline.Connectors[i].PosPoint.X < clickPoint.X && spline.Connectors[i + 1].PosPoint.X > clickPoint.X)
+                {
+                    fromConnector = spline.Connectors[i];
+                    toConnector = spline.Connectors[i + 1];
+                    break;
+                }
+            }
+
+            _canvas.Children.Remove(spline);
+            var pointsLeftSpline = spline.Connectors.TakeWhile(x => !Equals(x, fromConnector)).ToList();
+            pointsLeftSpline.Add(fromConnector);
+
+            var pointsRightSpline = spline.Connectors.Except(pointsLeftSpline).ToList();
+
+            // левый сплайн
+            var leftSpline = CreateSpline();
+            leftSpline.Connectors = pointsLeftSpline;
+            var firstCon = pointsLeftSpline.First();
+            firstCon.LeftFigure = null;
+            firstCon.RightFigure = leftSpline;
+            firstCon.UpdateLinks();
+            foreach (var lineConnector in pointsLeftSpline.Where(x => !Equals(x, firstCon)))
+            {
+                lineConnector.LeftFigure = leftSpline;
+                lineConnector.RightFigure = leftSpline;
+                lineConnector.UpdateLinks();
+            }
+            _canvas.Children.Add(leftSpline);
+
+            // правый сплайн
+            var rightSpline = CreateSpline();
+            rightSpline.Connectors = pointsRightSpline;
+            firstCon = pointsRightSpline.First();
+            firstCon.RightFigure = rightSpline;
+            firstCon.UpdateLinks();
+            foreach (var lineConnector in pointsRightSpline.Where(x => !Equals(x, firstCon)))
+            {
+                lineConnector.LeftFigure = rightSpline;
+                lineConnector.RightFigure = rightSpline;
+                lineConnector.UpdateLinks();
+            }
+            var lastCon = pointsRightSpline.Last();
+            lastCon.RightFigure = null;
+            lastCon.UpdateLinks();
+            _canvas.Children.Add(rightSpline);
+
+            // строим линию
+            var line = CreateLine();
+            line.LeftLineConnector = fromConnector;
+            line.LeftLineConnector.LeftFigure = leftSpline;
+            line.LeftLineConnector.RightFigure = line;
+            line.LeftLineConnector.UpdateLinks();
+
+            line.RightLineConnector = toConnector;
+            line.RightLineConnector.LeftFigure = line;
+            line.RightLineConnector.RightFigure = rightSpline;
+            line.RightLineConnector.UpdateLinks();
+            _canvas.Children.Add(line);
         }
     }
 }

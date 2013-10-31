@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Lab2.DrawElements.Controls;
+using Lab2.MathHelper;
 
 namespace Lab2.DrawElements.Lines
 {
@@ -17,8 +18,13 @@ namespace Lab2.DrawElements.Lines
         protected override void DrawGeometry(StreamGeometryContext context)
         {
             context.BeginFigure(FromPoint, true, false);
+
+            var l1 = DistanceCalculator.Calc(FromPoint, LeftBezierControl.PosPoint);
+            var l2 = DistanceCalculator.Calc(LeftBezierControl.PosPoint, RightBezierControl.PosPoint);
+            var l3 = DistanceCalculator.Calc(RightBezierControl.PosPoint, TargetPoint);
+            var stepSize = 1/(l1 + l2 + l3);
             
-            for (float step = 0; step <= 1; step += 0.01f)
+            for (double step = 0; step <= 1; step += stepSize)
             {
                 context.LineTo(GetPoint(step, FromPoint, TargetPoint), true, true);
             }
