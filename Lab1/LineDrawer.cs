@@ -93,10 +93,9 @@ namespace Lab1
             for (int curX = x1; curX < x2; curX += PixelSize)
             {
                 double curYFloat = y1 + (y2 - y1) * ((curX - x1) / (float)(x2 - x1));
-                //curYFloat = Math.Round(curYFloat/PixelSize)*PixelSize;
-
                 var curYRounded = Math.Round(curYFloat);
                 var c = curYRounded - curYFloat;
+                curYRounded = Math.Round(curYFloat / PixelSize) * PixelSize;
 
                 var b0 = (Math.Sqrt(Math.Pow((y2 - y1) / (float)(x2 - x1), 2))) / 2f;
                 double b1, b3;
