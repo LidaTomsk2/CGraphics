@@ -61,7 +61,7 @@ namespace Lab1
                     {
                         y += sy;
                     }
-                    e -= 2 * dx;
+                    e -= 2 * Math.Sqrt(dx);
                 }
                 if (changeFlag)
                 {
@@ -95,9 +95,9 @@ namespace Lab1
                 double curYFloat = y1 + (y2 - y1) * ((curX - x1) / (float)(x2 - x1));
                 var curYRounded = Math.Round(curYFloat);
                 var c = curYRounded - curYFloat;
-                curYRounded = Math.Round(curYFloat / PixelSize) * PixelSize;
+                curYRounded = Math.Round((int)curYFloat / PixelSize) * PixelSize;
 
-                var b0 = (Math.Sqrt(Math.Pow((y2 - y1) / (float)(x2 - x1), 2))) / 2f;
+                var b0 = (int)(Math.Sqrt(Math.Pow((y2 - y1) / (float)(x2 - x1), 2))) / 2f;
                 double b1, b3;
                 if (c >= 0)
                 {
@@ -148,7 +148,7 @@ namespace Lab1
 
                 if (Math.Abs(y) > 1)
                 {
-                    y = (Math.Abs(y) - 1)*Math.Sign(gradient);
+                    y = (int)(Math.Abs(y) - 1)*Math.Sign(gradient);
                     yPos += PixelSize*Math.Sign(gradient);
                 }
             }
