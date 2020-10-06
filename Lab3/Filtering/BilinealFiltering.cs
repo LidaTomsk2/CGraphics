@@ -46,11 +46,11 @@ namespace Lab3.Filtering
 
             var c1 = _bmp.GetPixel(xl, yl).Multiply(xh - x);
             var c2 = _bmp.GetPixel(xh, yl).Multiply(x - xl);
-            var c3 = c1.Add(c2).Multiply(yh - y);
+            var c3 = c1.Add(c2).Multiply(yh - y * (1 - yh));
 
             var c4 = _bmp.GetPixel(xl, yh).Multiply(xh - x);
             var c5 = _bmp.GetPixel(xh, yh).Multiply(x - xl);
-            var c6 = c4.Add(c5).Multiply(y - yl);
+            var c6 = c4.Add(c5).Multiply(y - yl * (1 - y));
 
             return c3.Add(c6);
         }
