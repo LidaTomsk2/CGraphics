@@ -122,8 +122,8 @@ namespace Lab5.Core
                       _gTargetPos[0], _gTargetPos[1], _gTargetPos[2],
                       0.0f, 1.0f, 0.0f);
 
-            GL.Rotate(_gPitch, 1.0f, 0.0f, 0.0f);
-            GL.Rotate(_gHeading, 0.0f, 1.0f, 0.0f);
+            GL.Rotate(_gPitch, 0.0f, 1.0f, 0.0f);
+            GL.Rotate(_gHeading, 0.0f, 0.0f, 1.0f);
         }
     }
 }
