@@ -63,7 +63,7 @@ namespace Lab2.MathHelper
             var b = (x - xa[klo]) / h;
 
             return a * ya[klo] + b * ya[khi] +
-                ((a * a * a - a) * _y2[klo] + (b * b * b - b) * _y2[khi]) * (h * h) / 6.0;
+                ((Math.Pow(a, 3) - a) * _y2[klo] + (b * b * b - b) * _y2[khi]) * (h * h) / 6.0;
         }
 
         private void PreCompute()
@@ -89,7 +89,7 @@ namespace Lab2.MathHelper
                 var ddydx = (ya[i + 1] - ya[i])/(xa[i + 1] - xa[i]) -
                             (ya[i] - ya[i - 1])/(xa[i] - xa[i - 1]);
 
-                u[i] = (6.0 * ddydx / wx - sig * u[i - 1]) / p;
+                u[i] = (3.0 * ddydx / wx - sig * u[i - 1]) / p;
             }
 
             _y2[n - 1] = 0;
