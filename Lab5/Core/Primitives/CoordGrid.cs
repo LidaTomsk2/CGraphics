@@ -17,12 +17,12 @@ namespace Lab5.Core.Primitives
         {
             GL.Color3(Color.Black);
             GL.Begin(BeginMode.Lines);
-            GL.Vertex3(-_size, 0, 0);
-            GL.Vertex3(_size, 0, 0);
             GL.Vertex3(0, -_size, 0);
             GL.Vertex3(0, _size, 0);
             GL.Vertex3(0, 0, -_size);
             GL.Vertex3(0, 0, _size);
+            GL.Vertex3(0 - _size, 0, 0);
+            GL.Vertex3(_size, 0, 0);
             GL.End();
         }
     }
